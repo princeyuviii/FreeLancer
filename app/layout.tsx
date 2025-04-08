@@ -6,6 +6,7 @@ import Navbar from '@/components/navbar'
 import { Providers } from '@/components/providers'
 import { ClerkProvider } from '@clerk/nextjs'
 import { dark } from '@clerk/themes'
+import { Analytics } from '@vercel/analytics/react'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,9 +23,9 @@ export default function RootLayout({
   return (
     <ClerkProvider appearance={{ baseTheme: dark }}>
       <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="icon" href="/public/favicon.ico" />
-      </head>
+        <head>
+          <link rel="icon" href="/favicon.ico" />
+        </head>
         <body className={inter.className}>
           <Providers
             attribute="class"
@@ -36,6 +37,7 @@ export default function RootLayout({
             <main className="mt-20 px-4">{children}</main>
             <Toaster />
           </Providers>
+          <Analytics />
         </body>
       </html>
     </ClerkProvider>
