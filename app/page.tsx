@@ -1,7 +1,8 @@
 'use client'
 
+import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { GraduationCap, Code2, Users, ArrowRight, Sparkles } from "lucide-react"
+import { GraduationCap, Code2, Users, ArrowRight, Sparkles, Shield, Rocket, IndianRupee } from "lucide-react"
 import Link from "next/link"
 import { Canvas } from "@react-three/fiber"
 import { OrbitControls, Stars, Environment, Float } from "@react-three/drei"
@@ -9,24 +10,6 @@ import { motion } from "framer-motion"
 import Spline from '@splinetool/react-spline'
 import { useRef, useEffect, useState } from "react"
 
-function SpinningBox() {
-  return (
-    <Float 
-      speed={1.4} 
-      rotationIntensity={1} 
-      floatIntensity={2}
-    >
-      <mesh>
-        <boxGeometry args={[2.5, 2.5, 2.5]} />
-        <meshStandardMaterial
-          color="#7C3AED"
-          roughness={0.2}
-          metalness={0.8}
-        />
-      </mesh>
-    </Float>
-  )
-}
 
 export default function Home() {
   const [isHovered, setIsHovered] = useState(false)
@@ -92,19 +75,11 @@ export default function Home() {
             </div>
           </motion.div>
         </div>
-      </section>
-
-      <section className="relative py-20 bg-black/40 backdrop-blur-sm">
-        <div className="absolute inset-0 bg-gradient-to-b from-violet-600/10 via-transparent to-transparent" />
-        <div className="max-w-7xl mx-auto">
-          <div className="h-[800px] w-full relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-violet-600/20 via-transparent to-violet-600/20 rounded-3xl overflow-hidden flex justify-center items-center" ref={splineRef}>
-              <div className="w-full h-full" style={{ transform: `scale(${scale})`, transformOrigin: "center" }}>
-                <Spline scene="https://prod.spline.design/xmYuMRbtvfM9o4V3/scene.splinecode" />
-              </div>
-            </div>
-          </div>
+        <Link href="/ai-assistant">
+        <div className="w-300px h-300px" style={{ transform: `scale(${scale})`, transformOrigin: "center" }}>
+            <Spline scene="https://prod.spline.design/V5bjQRd4fHXxcIlD/scene.splinecode" />
         </div>
+        </Link>
       </section>
 
       <section className="py-32 relative">
@@ -119,13 +94,38 @@ export default function Home() {
             Why Choose FreeLancer?
           </motion.h2>
           <div className="grid md:grid-cols-3 gap-12">
-            {[{
-              icon: <Code2 className="h-8 w-8 text-violet-400" />, title: "AI-Powered Assistance", desc: "Get real-time coding help and debugging from our advanced AI assistant."
-            }, {
-              icon: <GraduationCap className="h-8 w-8 text-violet-400" />, title: "Expert Mentorship", desc: "Connect with industry veterans for personalized career guidance."
-            }, {
-              icon: <Users className="h-8 w-8 text-violet-400" />, title: "Thriving Community", desc: "Join a network of passionate developers and freelancers."
-            }].map(({ icon, title, desc }, i) => (
+            {[
+              {
+                icon: <Code2 className="h-8 w-8 text-violet-400" />,
+                title: "AI-Powered Assistance",
+                desc: "Get real-time coding help and debugging from our advanced AI assistant. Our AI understands context and provides tailored solutions."
+              },
+              {
+                icon: <GraduationCap className="h-8 w-8 text-violet-400" />,
+                title: "Expert Mentorship",
+                desc: "1-on-1 sessions with industry veterans from top tech companies. Get personalized career guidance and code reviews."
+              },
+              {
+                icon: <Users className="h-8 w-8 text-violet-400" />,
+                title: "Thriving Community",
+                desc: "Join 10,000+ developers in our active Discord community. Collaborate, learn, and grow together."
+              },
+              {
+                icon: <IndianRupee className="h-8 w-8 text-violet-400" />,
+                title: "Competitive Earnings",
+                desc: "Top freelancers earn ₹3,00,000+/month. We take 0% commission on your first 5 projects."
+              },
+              {
+                icon: <Shield className="h-8 w-8 text-violet-400" />,
+                title: "Payment Protection",
+                desc: "Secure escrow payments and dispute resolution. Get paid on time, every time."
+              },
+              {
+                icon: <Rocket className="h-8 w-8 text-violet-400" />,
+                title: "Growth Opportunities",
+                desc: "Access to exclusive projects from our partner companies and startups."
+              }
+            ].map(({ icon, title, desc }, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
@@ -149,37 +149,81 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-violet-950/20 via-transparent to-transparent" />
         <div className="max-w-6xl mx-auto px-4 relative">
           <h2 className="text-4xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-purple-300">
-            Voices from Our Community
+            Our Impact in Numbers
           </h2>
-          <div className="grid md:grid-cols-2 gap-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { name: "Ayush", role: "Full Stack Developer", msg: "The AI assistant has become my go-to debugging partner. It's like having a senior developer always by my side!" },
-              { name: "Riya", role: "Frontend Specialist", msg: "The mentorship program helped me land my dream projects. The community here is incredibly supportive and encouraging." }
-            ].map(({ name, role, msg }, i) => (
+              { value: "10,000+", label: "Active Developers" },
+              { value: "₹50M+", label: "Earned by Freelancers" },
+              { value: "500+", label: "Expert Mentors" },
+              { value: "4.9/5", label: "Satisfaction Rating" }
+            ].map((stat, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8 }}
-                className="bg-gradient-to-br from-violet-950/30 to-purple-950/20 p-8 rounded-2xl backdrop-blur-sm border border-violet-500/20"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ delay: i * 0.2 }}
+                className="text-center"
               >
-                <p className="text-lg text-gray-300 italic mb-6">"{msg}"</p>
-                <div>
-                  <div className="font-semibold text-violet-300">{name}</div>
-                  <div className="text-sm text-gray-400">{role}</div>
-                </div>
+                <div className="text-4xl font-bold text-violet-300 mb-2">{stat.value}</div>
+                <div className="text-gray-400">{stat.label}</div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      <footer className="py-12 relative">
+      <footer className="py-16 relative">
         <div className="absolute inset-0 bg-gradient-to-t from-violet-950/20 via-transparent to-transparent" />
-        <div className="max-w-6xl mx-auto px-4 text-center relative">
-          <div className="text-sm text-gray-400">
-            <p className="mb-2">Built with ❤️ by Yuvi | Access Denied</p>
-            <p>© 2025 FreeLancer. All rights reserved.</p>
+        <div className="max-w-6xl mx-auto px-4 relative">
+          <div className="grid md:grid-cols-4 gap-12 mb-12">
+            <div>
+              <h3 className="text-xl font-semibold text-violet-300 mb-4">FreeLancer</h3>
+              <p className="text-gray-400">The future of freelancing with AI assistance and mentorship.</p>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold text-violet-300 mb-4">Quick Links</h3>
+              <ul className="space-y-2">
+                {['Jobs', 'Mentors', 'AI Assistant', 'Dashboard'].map((link) => (
+                  <li key={link}>
+                    <Link href={`/${link.toLowerCase().replace(' ', '-')}`} className="text-gray-400 hover:text-violet-300 transition-colors">
+                      {link}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold text-violet-300 mb-4">Resources</h3>
+              <ul className="space-y-2">
+                {['Blog', 'Documentation', 'Community', 'FAQ'].map((link) => (
+                  <li key={link}>
+                    <Link href={`/${link.toLowerCase()}`} className="text-gray-400 hover:text-violet-300 transition-colors">
+                      {link}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold text-violet-300 mb-4">Stay Updated</h3>
+              <div className="flex gap-2">
+                <Input placeholder="Your email" className="bg-violet-950/30 border-violet-500/20" />
+                <Button className="bg-violet-600 hover:bg-violet-700">Subscribe</Button>
+              </div>
+              <div className="flex gap-4 mt-4">
+                {['Twitter', 'Discord', 'LinkedIn', 'GitHub'].map((social) => (
+                  <Link key={social} href="#" className="text-gray-400 hover:text-violet-300 transition-colors">
+                    {social}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="pt-8 border-t border-violet-500/20 text-center">
+            <p className="text-sm text-gray-400">
+              © {new Date().getFullYear()} FreeLancer. All rights reserved.
+            </p>
           </div>
         </div>
       </footer>

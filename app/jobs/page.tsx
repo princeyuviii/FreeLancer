@@ -3,8 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Briefcase, MapPin, IndianRupee } from "lucide-react";
+import { Clock, Briefcase, MapPin, IndianRupee, Loader2, CheckCircle, MailCheck, Hourglass } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner"
+import { useUser } from "@clerk/nextjs";
 
 const jobs = [
   {
@@ -166,8 +168,35 @@ const jobs = [
 ];
 export default function JobsPage() {
   const [filter, setFilter] = useState("All");
+  const [appliedJobs, setAppliedJobs] = useState<number[]>([]);
+  const [loadingId, setLoadingId] = useState<number | null>(null);
 
   const filteredJobs = filter === "All" ? jobs : jobs.filter((job) => job.category === filter);
+
+  const handleApply = async (jobId: number, jobTitle: string, company: string) => {
+    setLoadingId(jobId);
+    try {
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      setAppliedJobs(prev => [...prev, jobId]);
+      
+      // Show success toast with email confirmation message
+      toast.success(
+        <div className="flex flex-col gap-1">
+          <div className="font-bold">Application Submitted!</div>
+          <div>You've applied for {jobTitle} at {company}</div>
+          <div className="text-sm text-gray-400 mt-2">
+            Check your email for confirmation with job details
+          </div>
+        </div>,
+        { duration: 5000 }
+      );
+    } finally {
+      setLoadingId(null);
+    }
+  };
+
 
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-[#0f0f0f] text-white">
@@ -185,7 +214,9 @@ export default function JobsPage() {
               key={cat}
               onClick={() => setFilter(cat)}
               variant="outline"
-              className={`border-gray-600 hover:bg-white hover:text-black ${filter === cat ? "bg-white text-black" : "bg-transparent text-white"}`}
+              className={`border-gray-600 hover:bg-white hover:text-black ${
+                filter === cat ? "bg-white text-black" : "bg-transparent text-white"
+              }`}
             >
               {cat}
             </Button>
@@ -209,20 +240,44 @@ export default function JobsPage() {
 
         <div className="space-y-6">
           {filteredJobs.map((job) => (
-            <Card key={job.id} className="p-6 bg-[#1b1b1b] hover:bg-[#2c2c2c] border border-gray-700 transition duration-300">
+            <Card
+              key={job.id}
+              className="p-6 bg-[#1b1b1b] hover:bg-[#2c2c2c] border border-gray-700 transition duration-300 group"
+            >
               <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
                 <div>
-                  <h3 className="text-xl font-semibold mb-2 text-white">{job.title}</h3>
+                  <h3 className="text-xl font-semibold mb-2 text-white group-hover:text-violet-300 transition-colors">
+                    {job.title}
+                  </h3>
                   <p className="text-gray-400 mb-2 font-medium">{job.company}</p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {job.skills.map((skill) => (
-                      <Badge key={skill} variant="outline" className="text-sm px-2 py-1 bg-[#2c2c2c] text-white border-gray-600">
+                      <Badge
+                        key={skill}
+                        variant="outline"
+                        className="text-sm px-2 py-1 bg-[#2c2c2c] text-white border-gray-600 hover:bg-violet-900/30 hover:border-violet-500 transition-colors"
+                      >
                         {skill}
                       </Badge>
                     ))}
                   </div>
                 </div>
-                <Button variant="default" className="bg-white text-black hover:bg-gray-300">Apply Now</Button>
+                <Button
+                  onClick={() => handleApply(job.id, job.title, job.company)}
+                  disabled={appliedJobs.includes(job.id) || loadingId === job.id}
+                  className={`min-w-[120px] ${
+                    appliedJobs.includes(job.id)
+                      ? "bg-green-600 hover:bg-green-700"
+                      : "bg-violet-600 hover:bg-violet-700"
+                  }`}
+                >
+                  {loadingId === job.id ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : appliedJobs.includes(job.id) ? (
+                    <CheckCircle className="mr-2 h-4 w-4" />
+                  ) : null}
+                  {appliedJobs.includes(job.id) ? "Applied" : "Apply Now"}
+                </Button>
               </div>
 
               <p className="mb-4 text-sm text-gray-300">{job.description}</p>
